@@ -29,6 +29,14 @@ class StoreProductRequest extends FormRequest
             'description' => 'required|string',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:0',
+            'images' => 'nullable|array|max:4',
+            'images.*' => 'required|string',
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'images.max' => 'Limite de 4 images par produit dépassée',
         ];
     }
 }
