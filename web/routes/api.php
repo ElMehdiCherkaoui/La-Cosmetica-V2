@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Employee\OrderManagementController;
 use App\Http\Controllers\Api\Admin\StatsController;
 use App\Http\Controllers\Api\Admin\CategoryController;
@@ -36,8 +37,8 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::put('/admin/categories/{id}', [CategoryController::class, 'update']);
     Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy']);
 
-    Route::get('/admin/products', [ProductController::class, 'index']);
-    Route::post('/admin/products', [ProductController::class, 'store']);
-    Route::put('/admin/products/{id}', [ProductController::class, 'update']);
-    Route::delete('/admin/products/{id}', [ProductController::class, 'destroy']);
+    Route::get('/admin/products', [AdminProductController::class, 'index']);
+    Route::post('/admin/products', [AdminProductController::class, 'store']);
+    Route::put('/admin/products/{id}', [AdminProductController::class, 'update']);
+    Route::delete('/admin/products/{id}', [AdminProductController::class, 'destroy']);
 });
