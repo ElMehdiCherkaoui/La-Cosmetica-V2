@@ -21,11 +21,26 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-     public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
-        $product = Product::create($request->validated());
+        $validated = $request->validated();
 
-        return response()->json($product, 201);
+        $images = $validated['images'] ?? [];
+
+        unset($validated['images']);
+
+        $product = Product::create($validated);
+
+        foreach ($images as $imageUrl) {
+            $product->images()->create([
+                'image_url' => $imageUrl,
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Produit créé avec succès',
+            'product' => $product->load('images'),
+        ], 201);
     }
 
     /**
@@ -39,7 +54,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-     public function update(UpdateProductRequest $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::find($id);
 
