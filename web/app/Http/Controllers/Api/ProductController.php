@@ -5,15 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\DAO\ProductDAOInterface;
 
 class ProductController extends Controller
 {
+    protected $productDAO;
+
+    public function __construct(ProductDAOInterface $productDAO)
+    {
+        $this->productDAO = $productDAO;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $products = Product::with(['category', 'productImage'])->where('stock', '>', 0)->get();
+        $products = $this->productDAO->getAll();
 
         return response()->json($products, 200);
     }
@@ -31,9 +38,7 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
-        $product = Product::with(['category', 'productImage'])
-            ->where('slug', $slug)
-            ->first();
+        $product = $this->productDAO->findBySlug($slug);
 
         if (!$product) {
             return response()->json([
