@@ -1,4 +1,3 @@
-
 import { createRouter, createWebHistory } from "vue-router";
 
 import HomeView from "./views/public/HomeView.vue";
@@ -15,8 +14,8 @@ import ManageCategories from "./views/admin/ManageCategories.vue";
 
 const routes = [
   { path: "/", component: HomeView },
-  { path: "/login", component: LoginView },
-  { path: "/register", component: RegisterView },
+  { path: "/login", component: LoginView, meta: { hideLayout: true } },
+  { path: "/register", component: RegisterView , meta: { hideLayout: true }},
   { path: "/products", component: ProductListView },
   { path: "/products/:slug", component: ProductDetailView },
   { path: "/cart", component: CartView },
