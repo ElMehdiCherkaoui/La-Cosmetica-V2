@@ -1,11 +1,27 @@
-<script setup lang="ts"></script>
-
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="min-h-screen flex flex-col">
+    <Header v-if="!$route.meta.hideLayout" />
+
+    <router-view v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+
+    <Footer v-if="!$route.meta.hideLayout" />
+  </div>
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import Header from '@/views/Layout/Nav.vue'
+import Footer from '@/views/Layout/Footer.vue'
+</script>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+</style>
