@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useAuthStore } from '@/stores/authStore';
 
@@ -106,9 +106,8 @@ const cancelOrder = async (orderId: number) => {
   }
 };
 
-onMounted(() => {
   fetchOrders();
-});
+
 
 
 const translateStatus = (status: string) => {
