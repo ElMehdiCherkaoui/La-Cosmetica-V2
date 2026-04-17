@@ -5,7 +5,6 @@ import LoginView from "./views/public/LoginView.vue";
 import RegisterView from "./views/public/RegisterView.vue";
 import ProductListView from "./views/shop/ProductListView.vue";
 import ProductDetailView from "./views/shop/ProductDetailView.vue";
-import CartView from "./views/client/CartView.vue";
 import MyOrdersView from "./views/client/MyOrdersView.vue";
 import EmployeeOrdersView from "./views/employee/EmployeeOrdersView.vue";
 import AdminDashboard from "./views/admin/AdminDashboard.vue";
@@ -18,7 +17,6 @@ const routes = [
   { path: "/register", component: RegisterView , meta: { hideLayout: true }},
   { path: "/products", component: ProductListView },
   { path: "/products/:slug", component: ProductDetailView },
-  { path: "/cart", component: CartView },
   { path: "/orders", component: MyOrdersView },
   { path: "/employee/orders", component: EmployeeOrdersView },
   { path: "/admin", component: AdminDashboard },
