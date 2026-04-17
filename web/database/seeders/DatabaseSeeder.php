@@ -10,59 +10,80 @@ use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
+	use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        $users = User::all();
+	/**
+	 * Seed the application's database.
+	 */
+	public function run(): void
+	{
 
-        Category::factory(3)
-            ->create()
-            ->each(function (Category $category): void {
-                Product::factory(4)
-                    ->create(['category_id' => $category->id])
-                    ->each(function (Product $product): void {
-                        ProductImage::factory()->create(['product_id' => $product->id]);
-                    });
-            });
+		$users = User::all();
+		User::create([
+			'name' => 'Admin User',
+			'email' => 'admin@example.com',
+			'password' => Hash::make('password'),
+			'role' => 'admin',
+		]);
 
-        $products = Product::all();
+		User::create([
+			'name' => 'Employee User',
+			'email' => 'employee@example.com',
+			'password' => Hash::make('password'),
+			'role' => 'employee',
+		]);
 
-        $users->each(function (User $user) use ($products): void {
-            $order = Order::factory()->create([
-                'user_id' => $user->id,
-                'status' => 'pending',
-                'total_amount' => 0,
-            ]);
+		User::create([
+			'name' => 'Client User',
+			'email' => 'client@example.com',
+			'password' => Hash::make('password'),
+			'role' => 'client',
+		]);
+		Category::factory(3)
+			->create()
+			->each(function (Category $category): void {
+				Product::factory(4)
+					->create(['category_id' => $category->id])
+					->each(function (Product $product): void {
+						ProductImage::factory(2)->create(['product_id' => $product->id]);
+					});
+			});
 
-            $total = 0;
-            $selectedProducts = $products->random(2);
+		$products = Product::all();
 
-            foreach ($selectedProducts as $product) {
-                $quantity = rand(1, 3);
-                $unitPrice = (float) $product->price;
-                $subtotal = $quantity * $unitPrice;
+		$users->each(function (User $user) use ($products): void {
+			$order = Order::factory()->create([
+				'user_id' => $user->id,
+				'status' => 'pending',
+				'total_amount' => 0,
+			]);
 
-                OrderItem::factory()->create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
-                    'quantity' => $quantity,
-                    'unit_price' => $unitPrice,
-                    'subtotal' => $subtotal,
-                ]);
+			$total = 0;
+			$selectedProducts = $products->random(2);
 
-                $total += $subtotal;
-            }
+			foreach ($selectedProducts as $product) {
+				$quantity = rand(1, 3);
+				$unitPrice = (float) $product->price;
+				$subtotal = $quantity * $unitPrice;
 
-            $order->update([
-                'total_amount' => $total,
-            ]);
-        });
-    }
+				OrderItem::factory()->create([
+					'order_id' => $order->id,
+					'product_id' => $product->id,
+					'quantity' => $quantity,
+					'unit_price' => $unitPrice,
+					'subtotal' => $subtotal,
+				]);
+
+				$total += $subtotal;
+			}
+
+			$order->update([
+				'total_amount' => $total,
+			]);
+		});
+	}
 }
